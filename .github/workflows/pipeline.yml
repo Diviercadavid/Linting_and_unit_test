@@ -5,7 +5,7 @@ on: [push, workflow_dispatch]
 env:
   SERVICE_NAME: mascot-api
   REPOSITORY_NAME: ${{ github.repository }}
-  REPOSITORY_NAME_LOWER: ${{ github.repository.toLowerCase() }}
+  REPOSITORY_NAME_LOWER: ${{ toLower(github.repository) }} 
 
 jobs:
   lint-and-test:
