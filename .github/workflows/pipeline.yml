@@ -4,6 +4,8 @@ on: [push, workflow_dispatch]
 
 env:
   SERVICE_NAME: mascot-api
+  REPOSITORY_NAME: ${{ github.repository }}
+  REPOSITORY_NAME_LOWER: ${{ github.repository.toLowerCase() }}
 
 jobs:
   lint-and-test:
@@ -82,13 +84,13 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Pull the image from GitHub Container Registry
-      run: docker pull ghcr.io/${{ github.repository.toLowerCase() }}:${{ github.sha }}
+      run: docker pull ghcr.io/${{ env.REPOSITORY_NAME_LOWER }}:${{ github.sha }}
 
     - name: Start ${{ env.SERVICE_NAME }}
       run: |
         docker run \
             --rm --detach --publish 8080:8080 \
-            --name $SERVICE_NAME ghcr.io/${{ github.repository.toLowerCase() }}:${{ github.sha }}
+            --name $SERVICE_NAME ghcr.io/${{ env.REPOSITORY_NAME_LOWER }}:${{ github.sha }}
         sleep 3 # allow some time for the service to start
 
     - name: Run tests using the container image
